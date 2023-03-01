@@ -3,6 +3,7 @@
     <q-table
       ref="table"
       :rows="rows"
+
       class="ss"
       :title="key"
       :columns="columns"
@@ -14,6 +15,7 @@
     >
       <template v-slot:top>
         <q-btn
+        class="q-ml-sm"
           color="primary"
           label="Crear"
           @click="create"
@@ -58,17 +60,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import moment from 'moment'
 
-const columns = [
-  {
-    name: 'register_code',
-    field: (row) => row.register_code,
-    format: (val) => `${val}`
-  },
-  { field: 'responsible_user_name' },
-  { field: 'unit_organic' },
-  { field: 'local' },
-  { label:'Fecha',field: 'date' ,format: (val) => moment(val).format("YYYY-MM-DD")}
-];
+
 
 interface HO{
   sortable:boolean;
@@ -79,6 +71,17 @@ interface HO{
 export default defineComponent({
   name: 'IndexPage',
   setup() {
+    const columns = [
+      {
+        name: 'register_code',
+        field: (row) => row.register_code,
+        format: (val) => `${val}`
+      },
+      { field: 'responsible_user_name' },
+      { field: 'unit_organic' },
+      { field: 'local' },
+      { label:'Fecha',field: 'date' ,format: (val) => moment(val).format("YYYY-MM-DD")}
+    ];
     columns.forEach((c:any)=>{
       c.sortable=true;
       c.name=c.name||c.field;

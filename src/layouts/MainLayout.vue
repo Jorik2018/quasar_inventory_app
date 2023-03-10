@@ -2,41 +2,36 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-toolbar-title> Gobierno Regional de Áncash - Sistema de Inventario </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>v1.0</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
+    <q-drawer v-model="leftDrawerOpen" show-if-above :width="250" :breakpoint="400">
+      <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
+        <q-list>
+          <q-item-label header class="text-bold"> SISTEMA DE INVENTARIO </q-item-label>
+          <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
+        </q-list>
+      </q-scroll-area>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+      <q-img class="absolute-top" src="../statics/inventory-img.jpg" style="height: 150px; opacity: 0.5;">
+        <div class="absolute-bottom bg-transparent">
+          <q-avatar size="56px" class="q-mb-sm">
+            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+          </q-avatar>
+          <div class="text-weight-bold">Razvan Stoenescu</div>
+          <div>@rstoenescu</div>
+        </div>
+      </q-img>
     </q-drawer>
 
     <q-page-container>
-      <transition
-  enter-active-class="animated fadeIn"
-  leave-active-class="animated fadeOut"
-  appear
-  :duration="300"
->
-      <router-view />
+      <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" appear :duration="300">
+        <router-view />
       </transition>
     </q-page-container>
     <q-resize-observer @resize="onResize" />
@@ -50,25 +45,22 @@ import EssentialLink from 'components/EssentialLink.vue';
 const linksList = [
   {
     title: 'Ingresos',
-    caption: 'forum.quasar.dev',
     icon: 'record_voice_over',
     link: '/admin/income',
   },
   {
     title: 'Traslado',
-    caption: '@quasarframework',
     icon: 'rss_feed',
     link: '/admin/transfer',
   },
   {
     title: 'Inventario',
-    caption: '@QuasarFramework',
     icon: 'public',
     link: '/admin/inventory',
   },
   {
     title: 'Cerrar Sesión',
-    caption: 'Community Quasar projects',
+    // caption: 'Community Quasar projects',
     icon: 'logout',
     link: 'https://awesome.quasar.dev',
   },

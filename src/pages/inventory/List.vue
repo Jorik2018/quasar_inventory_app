@@ -1,208 +1,233 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <q-table
-      title="Treats"
-      ref="table"
-      :rows="rows"
-      :columns="columns"
-      row-key="name"
-      :selected-rows-label="empty"
-      selection="multiple"
-      v-model:selected="selected"
-    >
-      <template v-slot:top>
-        <q-btn
-          color="primary"
-          :disable="!selected.length"
-          label="Crear"
-          @click="addRow"
-          icon="add"
-        />
-        <q-btn
-          class="q-ml-sm"
-          color="primary"
-          :disable="!selected.length"
-          label="Eliminar"
-          @click="removeRow"
-          icon="delete"
-        />
-        <q-btn class="q-ml-sm" color="primary" icon="refresh" />
-      </template>
-    </q-table>
-  </q-page>
-  <q-resize-observer @resize="onResize" />
+  <q-card class="my-card q-ma-md">
+    <q-card-section class="bg-teal text-white">
+      <div class="text-h6 text-center">REGISTRO DE INVENTARIO DE BIENES</div>
+      <!-- <div class="text-subtitle2">Datos del Usuario e Ingreso</div> -->
+    </q-card-section>
+    <q-card-section>
+      <q-page class="row items-center justify-evenly">
+        <q-table ref="table" :rows="rows" class="ss" :title="key" :columns="columns" v-model:pagination="pagination"
+          @request="load" row-key="id" :selected-rows-label="empty" selection="multiple" v-model:selected="selected"
+          :rows-per-page-options="[20, 50, 100]" color="secondary" :loading="loading">
+
+          <template v-slot:top>
+            <div class="col">
+              <div class="row justify-around">
+                <div class="col-md-2 col-xs-12 col-sm-8 q-mb-sm">
+                  <q-btn class="q-ml-sm full-width" color="primary" label="Reporte" @click="pdf" icon="picture_as_pdf" />
+                </div>
+                <!-- <div class="col-md-2 col-xs-12 col-sm-8 q-mb-sm">
+                  <q-btn class="q-ml-sm full-width" color="primary" :disable="!selected.length" label="Editar"
+                    @click="edit" icon="edit" />
+                </div>
+                <div class="col-md-2 col-xs-12 col-sm-8 q-mb-sm">
+                  <q-btn class="q-ml-sm full-width" color="primary" :disable="!selected.length" label="Eliminar"
+                    @click="removeRow" icon="delete" />
+                </div> -->
+                <div class="col-md-2 col-xs-12 col-sm-8 q-mb-sm">
+                  <q-btn class="q-ml-sm full-width" color="primary" icon="refresh" label="Actualizar"
+                    @click="load(pagination)" />
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <div class="q-mt-md">
+            Selected: {{ JSON.stringify(selected) }}
+          </div>
+
+          <template v-slot:header-cell="props">
+            <q-th @click="prev($event, props.col)" v-for="col in [props.col]" :key="col.name"
+              :props="{ ...props, sortable: true }">
+              {{ col.label || col.name || col.field }}
+              <q-input @click="prev" v-model="filters[col.filter || col.name]"></q-input>
+            </q-th>
+          </template>
+
+        </q-table>
+        <!-- <q-pagination v-model="pagination.page" :max="Math.cell(pagination.total / pagination.perPage)" @input="loadTableData" /> -->
+      </q-page>
+      <q-resize-observer @resize="onResize" />
+    </q-card-section>
+  </q-card>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
-const columns = [
-  {
-    name: 'name',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
-    field: (row) => row.name,
-    format: (val) => `${val}`,
-    sortable: true,
-  },
-  {
-    name: 'calories',
-    align: 'center',
-    label: 'Calories',
-    field: 'calories',
-    sortable: true,
-  },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-  {
-    name: 'calcium',
-    label: 'Calcium (%)',
-    field: 'calcium',
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
-  },
-  {
-    name: 'iron',
-    label: 'Iron (%)',
-    field: 'iron',
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
-  },
-];
-
-const rows = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: '14%',
-    iron: '1%',
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: '8%',
-    iron: '1%',
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: '6%',
-    iron: '7%',
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: '3%',
-    iron: '8%',
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: '7%',
-    iron: '16%',
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: '0%',
-    iron: '0%',
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: '0%',
-    iron: '2%',
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: '0%',
-    iron: '45%',
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: '2%',
-    iron: '22%',
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: '12%',
-    iron: '6%',
-  },
-];
+import axios from 'axios';
+import moment from 'moment';
 export default defineComponent({
   name: 'IndexPage',
   setup() {
+
+    const columns = [
+      {
+        name: 'patrimonial_code',
+        label: 'CÓDIGO PATRIMONIAL',
+        field: (row) => row.patrimonial_code,
+        format: (val) => `${val}`
+      },
+      {
+        field: 'denomination',
+        label: 'DENOMINACIÓN'
+      },
+      {
+        field: 'brand',
+        label: 'MARCA'
+      },
+      {
+        field: 'model',
+        label: 'MODELO'
+      },
+      {
+        field: 'color',
+        label: 'COLOR'
+      },
+      {
+        field: 'serie',
+        label: 'SERIE'
+      },
+      {
+        field: 'lot',
+        label: 'LOTE'
+      },
+      {
+        field: 'others',
+        label: 'OTROS'
+      },
+      {
+        field: 'conservation_state',
+        label: 'ESTADO'
+      },
+      {
+        field: 'unit_organic',
+        label: 'UNIDAD ORGÁNICA'
+      },
+      {
+        field: 'local',
+        label: 'LOCAL'
+      },
+      {
+        field: 'responsible_document',
+        label: 'DNI'
+      }, {
+        field: 'responsible_name',
+        label: 'NOMBRE COMPLETO'
+      }
+    ];
+
+    columns.forEach((c: any) => {
+      c.sortable = true;
+
+      c.name = c.name || c.field;
+      c.label = c.label || c.name.replace('_', ' ').toUpperCase();
+      c.align = 'center';
+    });
+
+    const rows = ref([]);
+
+    const selected = ref([])
+
+    const loading = ref(true);
+
+    const filters: any = ref({});
+
+    const pagination: any = ref({
+
+      page: 1,
+      rowsNumber: 0,
+      total: 0,
+      rowsPerPage: 20
+
+    });
+
+    const load = (e: any) => {
+      let { page, rowsPerPage } = e.value || e.pagination || e;
+      axios.get(`/inventory/${page}/${rowsPerPage}`, { params: { ...filters.value } }).then(e => {
+        rows.value = e.data.data;
+        pagination.value = { ...pagination.value, rowsNumber: e.data.count, page: page, rowsPerPage: rowsPerPage };
+      });
+    }
+
+    load(pagination);
+
     const table = ref(null);
+    const key = ref(0);
+
     const router = useRouter();
+
+    const onResize = (size) => {
+      table.value.$el.style.width = size.width - 2 + 'px';
+      console.log(table.value.$el.parentNode.offsetHeight);
+      table.value.$el.style.height =
+        parseInt(table.value.$el.parentNode.offsetHeight) - 0 + 'px';
+      table.value.$el.parentNode.style.overflow = 'hidden';
+    };
     return {
-      selected: ref([]),
+      load,
+      key,
+      prev(e, col) {
+        if (col) key.value++;
+        if (e.target.tagName == 'INPUT') e.stopPropagation();
+      },
+      pagination,
+      selected,
+      rows,
       table,
-      filter: null,
-      addRow() {
-        router.push('/risk/create');
+      columns,
+      onResize,
+      filters,
+      create() {
+        router.push('/admin/income/create');
+      },
+      edit() {
+        router.push('/admin/income/' + selected.value[0].id);
       },
       removeRow() {
         console.log('remove');
       },
       empty() {
-        return '';
-      },
-      columns,
-      rows,
-      onResize(size) {
-        table.value.$el.style.width = size.width - 2 + 'px';
-        console.log(table.value.$el.parentNode.offsetHeight);
-        table.value.$el.style.height =
-          parseInt(table.value.$el.parentNode.offsetHeight) - 0 + 'px';
-        table.value.$el.parentNode.style.overflow = 'hidden';
-      },
+        return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`
+      }
     };
-  },
+  }
 });
 </script>
+<style lang="sass">
+thead
+  .q-checkbox__inner
+    color:#FFF
+.ss .q-field__control
+  height: 30px
+.ss
+  /* specifying max-width so the example can
+    highlight the sticky column on any browser window */
+  width: 600px
+  height: 400px
+  thead
+
+    position: sticky
+    top: 0px
+    z-index: 100
+
+  thead tr th
+    position: sticky
+    /* higher than z-index for td below */
+    z-index: 2
+  thead tr
+    /* bg color is important for th; just specify one */
+    background-color: #009688 !important
+    color:#FFF
+  thead input
+    background-color: #FFF
+    text-align: center
+  td:first-child
+    background-color: #f5f5dc
+
+  th:first-child,
+  td:first-child
+    position: sticky
+    left: 0
+    z-index: 1
+</style>

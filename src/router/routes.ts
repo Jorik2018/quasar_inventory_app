@@ -1,45 +1,51 @@
 import { RouteRecordRaw } from 'vue-router';
+import Auth from './middleware';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    
+    redirect: '/admin/inventory',
+  },
+  {
+    path: '/admin',
     component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: Auth,
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: '', redirect: '/admin/inventory' },
       {
-        path: '/admin/risk',
-        component: () => import('pages/risk/List.vue'),
-      },
-      {
-        path: '/admin/risk/create',
-        component: () => import('pages/risk/Form.vue'),
-      },
-      {
-        path: '/admin/income',
+        path: 'income',
         component: () => import('pages/income/List.vue'),
       },
       {
-        path: '/admin/income/create',
+        path: 'income/create',
         component: () => import('pages/income/Form.vue'),
-      }
-      ,
+      },
       {
-        path: '/admin/transfer',
+        path: 'income/:pid',
+        props: true,
+        component: () => import('pages/income/Form.vue'),
+      },
+      {
+        path: 'transfer',
         component: () => import('pages/transfer/List.vue'),
       },
       {
-        path: '/admin/transfer/create',
+        path: 'transfer/create',
         component: () => import('pages/transfer/Form.vue'),
       },
       {
-        path: '/admin/inventory',
+        path: 'transfer/:pid',
+        props: true,
+        component: () => import('pages/transfer/Form.vue'),
+      },
+      {
+        path: 'inventory',
         component: () => import('pages/inventory/List.vue'),
       },
       {
-        path: '/admin/inventory/create',
+        path: 'inventory/create',
         component: () => import('pages/inventory/Form.vue'),
-      }
+      },
     ],
   },
 

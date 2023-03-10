@@ -12,6 +12,8 @@
 const { configure } = require('quasar/wrappers');
 const path = require('path');
 
+console.log(process.env.REACT_APP_BASE_URL);
+
 module.exports = configure(function (/* ctx */) {
   return {
     eslint: {
@@ -68,7 +70,7 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: '/',
+      publicPath: '/admin/inventory',
       // analyze: true,
       // env: {},
       // rawDefine: {}

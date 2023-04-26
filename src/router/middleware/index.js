@@ -12,7 +12,11 @@ export default async function Auth(to, from, next) {
     if (to.query.code !== undefined) {
       try {
         response = await axios.post(process.env.VUE_APP_API_URL + '/token', { code: to.query.code });
-        localStorage.setItem('token', response.data.access_token);
+        const token = response.data.access_token;
+        localStorage.setItem('token', token);
+        axios.defaults.headers.common = {
+          Authorization: `Bearer ${token}`
+        };
         next();
       } catch (error) {
         response = null;

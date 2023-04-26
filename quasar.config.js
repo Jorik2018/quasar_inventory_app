@@ -12,9 +12,13 @@
 const { configure } = require('quasar/wrappers');
 const path = require('path');
 
-console.log(process.env.REACT_APP_BASE_URL);
+
 
 module.exports = configure(function (/* ctx */) {
+
+
+  console.log('----' + process.env.VUE_APP_PUBLIC_PATH);
+
   return {
     eslint: {
       // fix: true,

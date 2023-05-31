@@ -1,7 +1,7 @@
 <template>
   <q-card class="my-card q-ma-md">
     <q-card-section class="bg-teal text-white">
-      <div class="text-h6 text-center">REGISTRO DE INGRESOS</div>
+      <div class="text-h6 text-center">ASIGNACIÓN DE BIENES DE USO</div>
       <!-- <div class="text-subtitle2">Datos del Usuario e Ingreso</div> -->
     </q-card-section>
     <q-card-section>

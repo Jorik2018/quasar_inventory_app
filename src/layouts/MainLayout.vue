@@ -44,12 +44,12 @@ import EssentialLink from 'components/EssentialLink.vue';
 
 const linksList = [
   {
-    title: 'Ingresos',
+    title: 'Asignación de Bienes',
     icon: 'record_voice_over',
     link: '/admin/income',
   },
   {
-    title: 'Traslado',
+    title: 'Desplazamiento Interno',
     icon: 'rss_feed',
     link: '/admin/transfer',
   },

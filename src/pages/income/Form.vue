@@ -392,7 +392,15 @@ export default defineComponent({
       },
 
       onSearch() {
-        axios.get('https://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.value.responsible_user_document + '&out=json').then(response => {
+        const token = process.env.VUE_APP_OAUTH_CLIENT_ID;
+        const config = {
+          headers: {
+            /* Authorization: `Bearer ${token}`, */
+            'Content-Type': 'application/json'
+          }
+        };
+
+        axios.get('https://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.value.responsible_user_document + '&out=json', config).then(response => {
           if (response.data.consultarResponse.return.coResultado == '0000') {
             const val = response.data.consultarResponse.return.datosPersona;
             o.value.responsible_user_name = val.apPrimer + ' ' + val.apSegundo + ' ' + val.prenombres;

@@ -450,13 +450,13 @@ export default defineComponent({
         'Salida', 'Reingreso', 'Desplazamiento'
       ],
       optionsReason: [
-        'Mantenimiento', 'Comisión de Servicios', 'Capacitación y/o Evento'
+        'Rotación', 'Ingreso de Personal', 'Salida de Personal', 'Entrega de Cargo'
       ],
       options: [
         'Central', 'COER'
       ],
       state: [
-        'Malo', 'Regular', 'Bueno'
+        'Malo', 'Regular', 'Bueno', 'RAEE'
       ],
       d,
       o,

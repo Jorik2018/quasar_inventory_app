@@ -353,7 +353,7 @@ export default defineComponent({
         'Central', 'COER'
       ],
       state: [
-        'Malo', 'Regular', 'Bueno'
+        'Malo', 'Regular', 'Bueno', 'RAEE'
       ],
       d,
       o,

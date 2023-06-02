@@ -23,8 +23,8 @@
           <q-avatar size="56px" class="q-mb-sm">
             <img src="https://cdn.quasar.dev/img/boy-avatar.png">
           </q-avatar>
-          <div class="text-weight-bold">Razvan Stoenescu</div>
-          <div>@rstoenescu</div>
+          <div class="text-weight-bold">Control Patrimonial</div>
+          <div>@regionancash.gob.pe</div>
         </div>
       </q-img>
     </q-drawer>

@@ -189,6 +189,11 @@ export default defineComponent({
       },
       empty() {
         return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`
+      },
+      pdf() {
+        let reportUrl = `${process.env.VUE_APP_BASE_URL}/api/inventory/report?type=inventory`;
+        // let reportUrl = '/report?type=in&id=' + props.pid
+        window.open(reportUrl, '_blank')
       }
     };
   }

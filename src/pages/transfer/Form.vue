@@ -492,43 +492,65 @@ export default defineComponent({
       },
 
       onSearchResponsible() {
-        axios.get('https://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.value.responsible_user_document + '&out=json').then(response => {
-          if (response.data.consultarResponse.return.coResultado == '0000') {
-            const val = response.data.consultarResponse.return.datosPersona;
-            o.value.responsible_user_name = val.apPrimer + ' ' + val.apSegundo + ' ' + val.prenombres;
-          } else {
-            o.value.responsible_user_name = '';
-            $q.notify({
-              message: 'Los datos no se encuentran en la Base de Datos.',
-              color: 'negative',
-              textColor: 'white',
-              icon: 'cloud_done',
-              position: 'top-right'
-            });
-          }
-        }).catch(error => {
-          console.log(error)
-        })
+        var myHeaders = new Headers();
+        myHeaders.append('Content-Type', '*/*');
+
+        var h = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow'
+        };
+
+        fetch('https://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.value.responsible_user_document + '&out=json', h)
+          .then(response => response.json())
+          .then(response => {
+            if (response.consultarResponse.return.coResultado == '0000') {
+              const val = response.consultarResponse.return.datosPersona;
+              o.value.responsible_user_name = val.apPrimer + ' ' + val.apSegundo + ' ' + val.prenombres;
+            } else {
+              o.value.responsible_user_name = '';
+              $q.notify({
+                message: 'Los datos no se encuentran en la Base de Datos.',
+                color: 'negative',
+                textColor: 'white',
+                icon: 'cloud_done',
+                position: 'top-right'
+              });
+            }
+          })
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
       },
 
       onSearchDestiny() {
-        axios.get('https://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.value.destiny_user_document + '&out=json').then(response => {
-          if (response.data.consultarResponse.return.coResultado == '0000') {
-            const val = response.data.consultarResponse.return.datosPersona;
-            o.value.destiny_user_name = val.apPrimer + ' ' + val.apSegundo + ' ' + val.prenombres;
-          } else {
-            o.value.destiny_user_name = '';
-            $q.notify({
-              message: 'Los datos no se encuentran en la Base de Datos.',
-              color: 'negative',
-              textColor: 'white',
-              icon: 'cloud_done',
-              position: 'top-right'
-            });
-          }
-        }).catch(error => {
-          console.log(error)
-        })
+        var myHeaders = new Headers();
+        myHeaders.append('Content-Type', '*/*');
+
+        var h = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow'
+        };
+
+        fetch('https://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.value.destiny_user_document + '&out=json', h)
+          .then(response => response.json())
+          .then(response => {
+            if (response.consultarResponse.return.coResultado == '0000') {
+              const val = response.consultarResponse.return.datosPersona;
+              o.value.destiny_user_name = val.apPrimer + ' ' + val.apSegundo + ' ' + val.prenombres;
+            } else {
+              o.value.destiny_user_name = '';
+              $q.notify({
+                message: 'Los datos no se encuentran en la Base de Datos.',
+                color: 'negative',
+                textColor: 'white',
+                icon: 'cloud_done',
+                position: 'top-right'
+              });
+            }
+          })
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
       },
 
       onSearchAsset() {

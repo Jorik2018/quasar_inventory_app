@@ -392,31 +392,34 @@ export default defineComponent({
       },
 
       onSearch() {
-        const token = process.env.VUE_APP_OAUTH_CLIENT_ID;
-        const config = {
-          headers: {
-            /* Authorization: `Bearer ${token}`, */
-            'Content-Type': '*/*'
-          }
+        var myHeaders = new Headers();
+        myHeaders.append('Content-Type', '*/*');
+
+        var h = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow'
         };
 
-        axios.get('https://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.value.responsible_user_document + '&out=json', config).then(response => {
-          if (response.data.consultarResponse.return.coResultado == '0000') {
-            const val = response.data.consultarResponse.return.datosPersona;
-            o.value.responsible_user_name = val.apPrimer + ' ' + val.apSegundo + ' ' + val.prenombres;
-          } else {
-            o.value.responsible_user_name = '';
-            $q.notify({
-              message: 'Los datos no se encuentran en la Base de Datos.',
-              color: 'negative',
-              textColor: 'white',
-              icon: 'cloud_done',
-              position: 'top-right'
-            });
-          }
-        }).catch(error => {
-          console.log(error)
-        })
+        fetch('https://web.regionancash.gob.pe/api/reniec/Consultar?nuDniConsulta=' + o.value.responsible_user_document + '&out=json', h)
+          .then(response => response.json())
+          .then(response => {
+            if (response.consultarResponse.return.coResultado == '0000') {
+              const val = response.consultarResponse.return.datosPersona;
+              o.value.responsible_user_name = val.apPrimer + ' ' + val.apSegundo + ' ' + val.prenombres;
+            } else {
+              o.value.responsible_user_name = '';
+              $q.notify({
+                message: 'Los datos no se encuentran en la Base de Datos.',
+                color: 'negative',
+                textColor: 'white',
+                icon: 'cloud_done',
+                position: 'top-right'
+              });
+            }
+          })
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
       },
 
       onReset() {

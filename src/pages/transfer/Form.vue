@@ -453,7 +453,7 @@ export default defineComponent({
         'Rotación', 'Ingreso de Personal', 'Salida de Personal', 'Entrega de Cargo'
       ],
       options: [
-        'Central', 'COER'
+        'Central', 'COER', 'Conchucos Alto', 'Conchucos Bajo', 'Aldea - San Marcos', 'Aldea Señor de la Soledad - Huaraz', 'Dirección Subregional de Producción - Huaraz', 'Dirección Regional de Producción - Chimbote'
       ],
       state: [
         'Malo', 'Regular', 'Bueno', 'RAEE'

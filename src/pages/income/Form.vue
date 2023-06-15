@@ -176,7 +176,7 @@
                 :rules="[val => val && val.length > 0 || 'Campo Obligatorio']" />
             </div>
             <div class="col-md-12 col-xs-12 col-sm-12 q-pa-xs">
-              <q-input filled v-model="d.others" label="Otros"
+              <q-input filled v-model="d.others" label="Ubicación Fisica"
                 :rules="[val => val && val.length > 0 || 'Campo Obligatorio']" />
             </div>
             <div class="col-md-12 col-xs-12 col-sm-12 q-pa-xs">
@@ -264,11 +264,6 @@ export default defineComponent({
         format: (val) => `${val}`
       },
       {
-        name: 'OTROS',
-        field: (row) => row.inventory.others,
-        format: (val) => `${val}`
-      },
-      {
         name: 'ESTADO',
         field: (row) => row.inventory.conservation_state,
         format: (val) => `${val}`
@@ -276,6 +271,11 @@ export default defineComponent({
       {
         name: 'OBSERVACIONES',
         field: (row) => row.inventory.observations,
+        format: (val) => `${val}`
+      },
+      {
+        name: 'UBICACIÓN FÍSICA',
+        field: (row) => row.inventory.others,
         format: (val) => `${val}`
       }
     ];

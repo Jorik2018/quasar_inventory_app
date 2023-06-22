@@ -135,7 +135,7 @@ export default defineComponent({
 
     const pagination: any = ref({
 
-      page: 1,
+      page: 0,
       rowsNumber: 0,
       total: 0,
       rowsPerPage: 20

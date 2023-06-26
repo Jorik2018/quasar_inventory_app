@@ -94,7 +94,7 @@ export default defineComponent({
       },
       {
         field: 'others',
-        label: 'UBICACIÓN FISICA'
+        label: 'OTROS'
       },
       {
         field: 'conservation_state',

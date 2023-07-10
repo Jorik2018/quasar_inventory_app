@@ -83,7 +83,7 @@ export default defineComponent({
       {
         label: 'FECHA',
         field: 'date',
-        format: (val) => moment(val).format('YYYY-MM-DD')
+        format: (val) => moment.utc(val).format('YYYY-MM-DD')
       }
     ];
 

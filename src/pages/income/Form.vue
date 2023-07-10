@@ -59,8 +59,8 @@
               </div>
             </q-card-section>
 
-            <q-card-actions v-if="!o.id">
-              <div class="col">
+            <q-card-actions>
+              <div class="col" v-if="!o.id">
                 <div class="row justify-around">
                   <div class="col-md-3 col-xs-12 col-sm-8 q-mb-sm">
                     <q-btn label="Grabar" class="q-ml-sm full-width" color="primary" type="submit" icon="add" />
@@ -70,6 +70,14 @@
                   </div>
                   <div class="col-md-3 col-xs-12 col-sm-8 q-mb-sm">
                     <q-btn label="Atras" class="q-ml-sm full-width" color="primary" @click="back" icon="arrow_back" />
+                  </div>
+                </div>
+              </div>
+              <div class="col" v-if="o.id">
+                <div class="row justify-around">
+                  <div class="col-md-3 col-xs-12 col-sm-8 q-mb-sm">
+                    <q-btn label="Actualizar" class="q-ml-sm full-width" color="primary" @click="onEditIncome"
+                      icon="edit" />
                   </div>
                 </div>
               </div>
@@ -95,11 +103,11 @@
               <!-- <div class="col-md-2 col-xs-12 col-sm-8 q-mb-sm">
                 <q-btn class="q-ml-sm full-width" color="primary" :disable="!selected.length" label="Editar" @click="edit"
                   icon="edit" />
-              </div>
+              </div> -->
               <div class="col-md-2 col-xs-12 col-sm-8 q-mb-sm">
                 <q-btn class="q-ml-sm full-width" color="primary" :disable="!selected.length" label="Eliminar"
-                  @click="removeRow" icon="delete" />
-              </div> -->
+                  @click="removeRow(selected[0].id)" icon="delete" />
+              </div>
               <div class="col-md-2 col-xs-12 col-sm-8 q-mb-sm">
                 <q-btn class="q-ml-sm full-width" color="primary" label="Imprimir" icon="picture_as_pdf" @click="print" />
               </div>
@@ -321,8 +329,8 @@ export default defineComponent({
           const date = response.data.date;
           const var1 = new Date(date);
           const year = var1.getFullYear();
-          const month = pad(var1.getMonth(), 2);
-          const day = pad(var1.getDate(), 2);
+          const month = pad(var1.getMonth() + 1, 2);
+          const day = pad(var1.getDate() + 1, 2);
           const fecha = year + '-' + month + '-' + day;
           o.value.date = fecha;
           o.value.id = response.data.id;
@@ -387,6 +395,31 @@ export default defineComponent({
             }).catch(error => {
               console.log(error)
             })
+          }
+        });
+      },
+
+      onEditIncome() {
+        let a: any = o.value;
+        a.destiny_user_email = a.responsible_user_email;
+        a.destiny_user_name = a.responsible_user_name;
+        a.destiny_user_document = a.responsible_user_document;
+        a.v1 = a.date;
+        const formattedString = date.formatDate(a.v1, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
+        a.date = formattedString;
+        o.value = a;
+
+        axios.put('/movement/' + props.pid, o.value).then((e: any) => {
+          if (e.data.id) {
+            o.value.id = e.data.id;
+            $q.notify({
+              message: 'Se actualizo correctamente.',
+              color: 'teal',
+              textColor: 'white',
+              icon: 'cloud_done',
+              position: 'top-right'
+            });
+            load();
           }
         });
       },
@@ -488,8 +521,30 @@ export default defineComponent({
       edit() {
         router.push('/admin/income/');
       },
-      removeRow() {
-        console.log('remove');
+      removeRow(id) {
+        axios.delete(`/detail/${id}`)
+          .then(response => {
+            // Eliminación exitosa, realizar cualquier acción necesaria
+            $q.notify({
+              message: 'Registro eliminado correctamente.',
+              color: 'teal',
+              textColor: 'white',
+              icon: 'cloud_done',
+              position: 'top-right'
+            });
+            load();
+          })
+          .catch(error => {
+            // Manejar errores en caso de que la eliminación falle
+            $q.notify({
+              message: 'Error al eliminar.',
+              color: 'danger',
+              textColor: 'white',
+              icon: 'cloud_done',
+              position: 'top-right'
+            });
+            load();
+          });
       },
       empty() {
         return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`

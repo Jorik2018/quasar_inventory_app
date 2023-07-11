@@ -57,6 +57,12 @@
                     :rules="[val => val && val.length > 0 || 'Campo Obligatorio']" />
                 </div>
               </div>
+              <div class="row">
+                <div class="col-md-12 col-xs-12 col-sm-12 q-pa-xs">
+                  <q-input filled v-model="o.auth_document" label="Referencia"
+                    :rules="[val => val && val.length > 0 || 'Campo Obligatorio']" />
+                </div>
+              </div>
             </q-card-section>
 
             <q-card-actions>
@@ -326,6 +332,7 @@ export default defineComponent({
           o.value.unit_organic = response.data.unit_organic;
           o.value.register_code = response.data.register_code;
           o.value.address = response.data.address;
+          o.value.auth_document = response.data.auth_document;
           const date = response.data.date;
           const var1 = new Date(date);
           const year = var1.getFullYear();
@@ -374,6 +381,7 @@ export default defineComponent({
         a.destiny_user_email = a.responsible_user_email;
         a.destiny_user_name = a.responsible_user_name;
         a.destiny_user_document = a.responsible_user_document;
+        a.auth_document = a.auth_document;
         a.v1 = a.date;
         const formattedString = date.formatDate(a.v1, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
         a.date = formattedString;
@@ -404,6 +412,7 @@ export default defineComponent({
         a.destiny_user_email = a.responsible_user_email;
         a.destiny_user_name = a.responsible_user_name;
         a.destiny_user_document = a.responsible_user_document;
+        a.auth_document = a.auth_document;
         a.v1 = a.date;
         const formattedString = date.formatDate(a.v1, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
         a.date = formattedString;
@@ -464,6 +473,7 @@ export default defineComponent({
         o.value.local = '';
         o.value.address = '';
         o.value.date = '';
+        o.value.auth_document = '';
       },
 
       getSelectedString() {

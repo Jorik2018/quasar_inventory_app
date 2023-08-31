@@ -542,7 +542,7 @@ export default defineComponent({
               icon: 'cloud_done',
               position: 'top-right'
             });
-            load();
+            window.location.reload();
           })
           .catch(error => {
             // Manejar errores en caso de que la eliminación falle
@@ -553,7 +553,7 @@ export default defineComponent({
               icon: 'cloud_done',
               position: 'top-right'
             });
-            load();
+            window.location.reload();
           });
       },
       empty() {

@@ -505,16 +505,18 @@ export default defineComponent({
                 position: 'top-right'
               });
             }).catch(error => {
-              $q.notify({
-                message: 'El código patrimonial ya está registrado.',
-                color: 'red',
-                textColor: 'white',
-                icon: 'report_problem',
-                position: 'top-right'
-              });
               console.log(error)
             })
           }
+        }).catch(error => {
+          $q.notify({
+            message: 'El código patrimonial ya está registrado.',
+            color: 'red',
+            textColor: 'white',
+            icon: 'report_problem',
+            position: 'top-right'
+          });
+          console.log(error)
         });
       },
 

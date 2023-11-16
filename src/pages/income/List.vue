@@ -8,7 +8,7 @@
       <q-page class="row items-center justify-evenly">
         <q-table ref="table" :rows="rows" class="ss" :title="key" :columns="columns" v-model:pagination="pagination"
           @request="load" row-key="id" :selected-rows-label="empty" selection="multiple" v-model:selected="selected"
-          :rows-per-page-options="[20, 50, 100]" color="secondary" :loading="loading">
+          :rows-per-page-options="[20, 50, 200]" color="secondary" :loading="loading">
 
           <template v-slot:top>
             <div class="col">
